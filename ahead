@@ -1,0 +1,11 @@
+#! /bin/bash
+if [ $# -eq 0 ]
+  then 
+      export branch="master"
+  else
+      export branch=$1
+fi
+  
+export ref="refs/remotes/upstream/$branch"
+export hash=$(git show-ref --verify $ref --hash)
+git rev-list $hash..HEAD | wc -l | xargs echo
