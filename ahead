@@ -1,11 +1,17 @@
 #! /bin/bash
 if [ $# -eq 0 ]
-  then 
-      export branch="master"
-  else
-      export branch=$1
+    then
+        export branch="master"
+    else
+        export branch=$1
 fi
-  
-export ref="refs/remotes/upstream/$branch"
+
+if [ $(git remote | wc -l | xargs echo) -eq 2 ]
+    then
+        export ref="refs/remotes/upstream/$branch"
+    else
+        export ref="refs/remotes/origin/$branch"
+fi
+
 export hash=$(git show-ref --verify $ref --hash)
 git rev-list $hash..HEAD | wc -l | xargs echo
