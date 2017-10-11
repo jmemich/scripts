@@ -1,0 +1,19 @@
+#! /bin/bash
+FILEPATH=$1
+if echo $FILEPATH | grep -q '/'
+        then
+                # how many '/'
+                SLASHES=`echo $FILEPATH | grep -o / | wc -l | xargs echo`
+                SLASHES=$((SLASHES + 1)); 
+                NAME=`echo $FILEPATH | cut -d '/' -f $SLASHES | cut -d '.' -f 1`
+                PATH=`echo $FILEPATH | grep -o ".*/"`
+        else
+                # this means its just `file.tex`
+                NAME=`echo $FILEPATH | cut -d '.' -f 1`
+                PATH=""
+fi
+PDFPATH="$PATH$NAME.pdf"
+
+# TODO -output-directory !
+/Library/TeX/texbin/pdflatex $FILEPATH 2&>1 /dev/null
+/usr/bin/open -a Skim $PDFPATH
